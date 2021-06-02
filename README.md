@@ -1,9 +1,11 @@
 # Desafio
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.2.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.2. And belongs to a challenge of Becomex
 
 ## Development server
 
+Clone into folder EC2_SERVER of the docker image
+RUN `npm install` to install the project and get the node_modules
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
