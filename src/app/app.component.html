@@ -1,0 +1,25 @@
+<div class="page-loader page-loader-base" *ngIf="loading">
+    <div class="blockui">
+        <span>Carregando...</span>
+        <span>
+            <div class="spinner spinner-primary"></div>
+        </span>
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+        <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+            <app-header></app-header>
+            <!--begin::Content-->
+            <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                <router-outlet></router-outlet>
+            </div>
+            <!--end::Content-->
+
+            <app-footer></app-footer>
+        </div>
+    </div>
+</div>
+
+<!--end::Main-->

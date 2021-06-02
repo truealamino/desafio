@@ -1,0 +1,148 @@
+<app-subheader [title]="'Visualização de País'"></app-subheader>
+
+<!--begin::Modal-->
+<div class="modal fade" id="routesModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Calcular Rotas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="kt_subheader_leaflet" style="width: 100%;">
+                    <div id="kt_subheader_leaflet" style="height:300px; width: 100%;">
+                        <form class="form" #formRoutes="ngForm">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-lg-5">
+                                        <label>Origem:</label>
+                                        <input type="text" class="form-control" [disabled]="true" name="origin"
+                                        #value="ngModel" [(ngModel)]="originCountry.name" />
+                                    </div>
+                                    <div class="col-lg-5">
+                                            <label>Destino:</label>
+                                            <select #countriesDestSelect="ngModel" name="destiny" [(ngModel)]="destinyCountry.alpha3Code"
+                                            class="form-control text-primary font-weight-bold mr-4 border-0 bg-light">
+                                            <option *ngFor="let region of regionCountries" [value]="region.alpha3Code">{{ region.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12" *ngIf="listRouteOld.length > 0">
+                                        <label>Rota:</label>
+                                        <p class="form-control-plaintext text-muted">
+                                            <span>
+                                                <span class="label label-light-primary label-pill label-inline mr-2">{{ finalRoute }}</span>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" #closeRoutesModal class="btn btn-light-primary font-weight-bold"
+                    data-dismiss="modal">Cancelar</button>
+                <button type="button" (click)="onSearchRoute()" class="btn btn-primary font-weight-bold">Buscar Rota</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-custom gutter-b" style="height: 550px; overflow-y: auto;">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Dados Gerais
+                        </h3>
+                        <div class="card-toolbar">
+                            <a href="javascript:;" class="btn btn-primary font-weight-bolder font-size-sm" (click)="openModal()"
+                                data-toggle="modal" aria-haspopup="true" aria-expanded="false" data-target="#routesModal">Rotas</a>
+                        </div>
+                    </div>
+                    <form class="form" #form="ngForm">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label>Nome do País:</label>
+                                    <p class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ country.name }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>População:</label>
+                                    <p class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ country.population }} Habitantes</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Capital:</label>
+                                    <p class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ country.capital }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Timezone:</label>
+                                    <p class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ country.timezones.join(', ') }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label>Moedas:</label>
+                                    <p *ngFor="let currency of country.currencies" class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ currency.name }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Línguas:</label>
+                                    <p *ngFor="let language of country.languages" class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ language.name }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Blocos Econômicos:</label>
+                                    <p *ngFor="let bloc of country.regionalBlocs" class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ bloc.name }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-3" *ngIf="borders.length > 0">
+                                    <label>Fronteiras:</label>
+                                    <p *ngFor="let border of borders" class="form-control-plaintext text-muted">
+                                        <span>
+                                            <span class="label label-light-primary label-pill label-inline mr-2">{{ border.name }}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

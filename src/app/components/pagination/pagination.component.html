@@ -1,0 +1,19 @@
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+    <div class="d-flex flex-wrap py-2 mr-3">
+        <a href="javascript:;" *ngIf="currentPage == 1" title="{{txt2}}"
+            class="btn btn-icon btn-sm btn-light mr-2 my-1 disabled" disabled><i
+                class="ki ki-bold-arrow-back icon-xs"></i></a>
+        <a href="javascript:;" *ngIf="currentPage != 1" (click)="prevPage()" title="{{txt2}}"
+            class="btn btn-icon btn-sm btn-light mr-2 my-1"><i class="ki ki-bold-arrow-back icon-xs"></i></a>
+
+        <a *ngFor="let page of pagesShow" href="javascript:;" (click)="goto(page, pageSize)" title="{{ page }}"
+            [ngClass]="{'active' : page == currentPage}"
+            class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">{{ page }}</a>
+
+        <a href="javascript:;" *ngIf="currentPage == pages.length" title="{{txt3}}"
+            class="btn btn-icon btn-sm btn-light mr-2 my-1 disabled" disabled><i
+                class="ki ki-bold-arrow-next icon-xs"></i></a>
+        <a href="javascript:;" *ngIf="currentPage != pages.length" (click)="nextPage()" title="{{txt3}}"
+            class="btn btn-icon btn-sm btn-light mr-2 my-1"><i class="ki ki-bold-arrow-next icon-xs"></i></a>
+    </div>
+</div>

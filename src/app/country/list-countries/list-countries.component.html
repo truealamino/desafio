@@ -1,0 +1,115 @@
+<app-subheader [title]="'Pesquisar Países'"></app-subheader>
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-custom card-stretch gutter-b">
+                    <!--begin::Header-->
+                    <div class="card-header border-0 py-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label font-weight-bolder text-dark">Filtros</span>
+                        </h3>
+
+                        <div class="row">
+                            <form (submit)="loadCountries()" style="width: 100%" class="form d-flex align-items-md-center flex-sm-row flex-column flex-grow-1 flex-sm-grow-0" #formSearch="ngForm">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <input type="text" class="form-control border-2 font-weight-bold pl-2" placeholder="Tipo" name="typeSearch"
+                                            [(ngModel)]="typeSearchLeg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                            data-target="kt_searchbar_7_category-options" data-offset="0,10" readonly="readonly" />
+                                        <div id="kt_searchbar_7_category-options" class="dropdown-menu dropdown-menu-sm">
+                                            <div class="dropdown-item cursor-pointer" (click)="onChangeStatus(0)">Todos</div>
+                                            <div class="dropdown-divider"></div>
+                                            <div class="dropdown-item cursor-pointer" (click)="onChangeStatus(1)">Nome</div>
+                                            <div class="dropdown-item cursor-pointer" (click)="onChangeStatus(2)">Sigla</div>
+                                            <div class="dropdown-item cursor-pointer" (click)="onChangeStatus(3)">Moeda</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control border-2 font-weight-bold pl-2" placeholder="Digite o termo" name="nome" #nome="ngModel" [(ngModel)]="term" />
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <button type="submit" class="btn btn-primary font-weight-bold btn-hover-light-primary mt-3 mt-sm-0 px-7">
+                                            <span class="svg-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--end::Header-->
+
+                    <div class="card-body pt-0 pb-3">
+                        <div class="tab-content">
+                            <div *ngIf="countries.length <= 0" class="ml-2">
+                                <p class="text-muted">Opss.. Nenhum país encontrado.</p>
+                            </div>
+
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col" class="pl-7 text-left">Nome do País</th>
+                                        <th scope="col" class="text-center">Sigla</th>
+                                        <th scope="col" class="text-center">Moedas</th>
+                                        <th scope="col" class="text-center">Bandeira</th>
+                                        <th scope="col" class="text-left">Blocos Econômicos</th>
+                                        <th class="text-center" style="min-width: 100px">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let country of countries">
+                                    <tr>
+                                        <td class="text-left">
+                                            <p class="text-dark-75 font-weight-bolder mb-1 font-size-lg" style="margin-left: 15px;">{{ country.name }}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <p class="text-muted text-dark-75 font-weight-bolder mb-1 font-size-lg">{{ country.alpha3Code }}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="text-nowrap" *ngFor="let currency of country.currencies">
+                                                <p class="text-dark-75 font-weight-bolder mb-1 font-size-lg">{{currency.code}}</p>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <img src="{{country.flag}}" class="img-thumbnail" alt="">
+                                        </td>
+                                        <td class="text-left">
+                                            <div class="text-nowrap" *ngFor="let bloc of country.regionalBlocs">
+                                                <p class="text-dark-75 font-weight-bolder mb-1 font-size-lg">{{bloc.name}}</p>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <a [routerLink]="['/country/' + country.alpha3Code]"  class="btn btn-icon btn-sm btn-outline-warning" aria-haspopup="true" aria-expanded="false">
+                                                <span class="svg-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <path d="M12.8434797,16 L11.1565203,16 L10.9852159,16.6393167 C10.3352654,19.064965 7.84199997,20.5044524 5.41635172,19.8545019 C2.99070348,19.2045514 1.55121603,16.711286 2.20116652,14.2856378 L3.92086709,7.86762789 C4.57081758,5.44197964 7.06408298,4.00249219 9.48973122,4.65244268 C10.5421727,4.93444352 11.4089671,5.56345262 12,6.38338695 C12.5910329,5.56345262 13.4578273,4.93444352 14.5102688,4.65244268 C16.935917,4.00249219 19.4291824,5.44197964 20.0791329,7.86762789 L21.7988335,14.2856378 C22.448784,16.711286 21.0092965,19.2045514 18.5836483,19.8545019 C16.158,20.5044524 13.6647346,19.064965 13.0147841,16.6393167 L12.8434797,16 Z M17.4563502,18.1051865 C18.9630797,18.1051865 20.1845253,16.8377967 20.1845253,15.2743923 C20.1845253,13.7109878 18.9630797,12.4435981 17.4563502,12.4435981 C15.9496207,12.4435981 14.7281751,13.7109878 14.7281751,15.2743923 C14.7281751,16.8377967 15.9496207,18.1051865 17.4563502,18.1051865 Z M6.54364977,18.1051865 C8.05037928,18.1051865 9.27182488,16.8377967 9.27182488,15.2743923 C9.27182488,13.7109878 8.05037928,12.4435981 6.54364977,12.4435981 C5.03692026,12.4435981 3.81547465,13.7109878 3.81547465,15.2743923 C3.81547465,16.8377967 5.03692026,18.1051865 6.54364977,18.1051865 Z" fill="#000000" />
+                                                        </g>
+                                                    </svg>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12">
+                            <app-pagination [total]="countriesPag" [currentPage]="currentPage" [pageSize]="pageSize"
+                                (pageChanged)="pageChanged($event)"></app-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
